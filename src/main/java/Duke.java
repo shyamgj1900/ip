@@ -6,11 +6,10 @@ public class Duke {
     public static String[] textList = new String[100];
 
     public static void addList(String word) {
-
-        if(Objects.equals(word, "list")) {
+        if (Objects.equals(word, "list")) {
             System.out.println("-----------------------------------");
-            for(int i = 0; i < listSize; i++) {
-                System.out.println(i+1 + ". " + textList[i]);
+            for (int i = 0; i < listSize; i++) {
+                System.out.println(i + 1 + ". " + textList[i]);
             }
             System.out.println("-----------------------------------");
         } else {
@@ -30,9 +29,9 @@ public class Duke {
         System.out.println("-----------------------------------");
 
         String word = "";
-        while(!Objects.equals(word, "bye")){
+        while (!Objects.equals(word, "bye")) {
             word = myWord.nextLine();
-            if(!Objects.equals(word, "bye")) {
+            if (!Objects.equals(word, "bye")) {
                 addList(word);
             }
         }
