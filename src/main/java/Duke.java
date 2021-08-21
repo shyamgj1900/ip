@@ -2,10 +2,24 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Duke {
-    public static void echo(String word){
+    public static int listSize = 0;
+    public static String[] textList = new String[100];
+
+    public static void addList(String word) {
+
+        if(Objects.equals(word, "list")) {
             System.out.println("-----------------------------------");
-            System.out.println(word);
+            for(int i = 0; i < listSize; i++) {
+                System.out.println(i+1 + ". " + textList[i]);
+            }
             System.out.println("-----------------------------------");
+        } else {
+            textList[listSize] = word;
+            System.out.println("-----------------------------------");
+            System.out.println("added: " + textList[listSize]);
+            System.out.println("-----------------------------------");
+            listSize++;
+        }
     }
 
     public static void main(String[] args) {
@@ -19,7 +33,7 @@ public class Duke {
         while(!Objects.equals(word, "bye")){
             word = myWord.nextLine();
             if(!Objects.equals(word, "bye")) {
-                echo(word);
+                addList(word);
             }
         }
         System.out.println("-----------------------------------");
