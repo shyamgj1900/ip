@@ -15,7 +15,7 @@ public class Duke {
             word = myWord.nextLine();
             if (!Objects.equals(word, "bye")) {
                 Task t = new Task();
-                t.addList(word);
+                Task.addList(word);
             }
         }
         System.out.println("-----------------------------------");
