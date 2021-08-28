@@ -1,11 +1,12 @@
 
 
 public class Task {
-    private static int listSize = 0;
-    public static final int MAX_SIZE = 100;
     protected String task;
-
     protected boolean isDone;
+
+    public Task() {
+        this("");
+    }
 
     public Task(String task) {
         this.task = task;
@@ -22,5 +23,10 @@ public class Task {
 
     public void setDone() {
         isDone = true;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + getStatusIcon() + "]" + getTask();
     }
 }
