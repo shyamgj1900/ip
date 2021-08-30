@@ -29,7 +29,7 @@ public class Duke {
             sentence = sentence.replace("deadline", "");
             int slashPos = sentence.indexOf("/");
             String task = sentence.substring(0, slashPos);
-            String by = "";
+            String by = null;
             int byPos = sentence.indexOf("/by");
             by = sentence.substring(byPos + 3);
             t[ctr] = new Deadline(task, by);
@@ -43,7 +43,7 @@ public class Duke {
             sentence = sentence.replace("event", "");
             int slashPos = sentence.indexOf("/");
             String task = sentence.substring(0, slashPos);
-            String at = "";
+            String at = null;
             int atPos = sentence.indexOf("/at");
             at = sentence.substring(atPos + 3);
             t[ctr] = new Event(task, at);
