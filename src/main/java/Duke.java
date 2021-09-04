@@ -6,20 +6,20 @@ public class Duke {
 
     public static void main(String[] args) {
         Scanner mySentence = new Scanner(System.in);
-        Task[] t = new Task[MAX_SIZE];
+        Task[] task = new Task[MAX_SIZE];
         int ctr = 0;
         welcomeMessage();
         String sentence = "";
         while (!Objects.equals(sentence, "bye")) {
             sentence = mySentence.nextLine();
             if (Objects.equals(sentence, "list")) {
-                printList(t, ctr);
+                printList(task, ctr);
             } else if (sentence.contains("done")) {
-                markDone(t, sentence);
+                markDone(task, sentence);
             } else if (Objects.equals(sentence, "bye")) {
                 exitMessage();
             } else {
-                ctr = createTask(t, ctr, sentence);
+                ctr = createTask(task, ctr, sentence);
             }
         }
     }
@@ -66,20 +66,20 @@ public class Duke {
         return ctr;
     }
 
-    private static void markDone(Task[] t, String word) {
-        String l = word.substring(word.length() - 1);
-        int idx = Integer.parseInt(l);
-        t[idx - 1].setDone();
+    private static void markDone(Task[] task, String word) {
+        String num = word.substring(word.length() - 1);
+        int index = Integer.parseInt(num);
+        task[index - 1].setDone();
         System.out.println("-----------------------------------");
         System.out.println("Nice! I've marked this task as done:");
-        System.out.println(t[idx - 1].toString());
+        System.out.println(task[index - 1].toString());
         System.out.println("-----------------------------------");
     }
 
-    private static void printList(Task[] t, int ctr) {
+    private static void printList(Task[] task, int ctr) {
         System.out.println("-----------------------------------");
         for (int i = 0; i < ctr; i++) {
-            System.out.println(i + 1 + ". " + t[i].toString());
+            System.out.println(i + 1 + ". " + task[i].toString());
         }
         System.out.println("-----------------------------------");
     }
