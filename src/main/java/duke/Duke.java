@@ -5,29 +5,28 @@ import duke.task.Event;
 import duke.task.Task;
 import duke.task.Todo;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class Duke {
-    public static final int MAX_SIZE = 100;
 
     public static void main(String[] args) {
         Scanner mySentence = new Scanner(System.in);
-        Task[] task = new Task[MAX_SIZE];
-        int totalTask = 0;
+        ArrayList<Task> task = new ArrayList<>();
         welcomeMessage();
         String sentence = "";
         while (!Objects.equals(sentence, "bye")) {
             try {
                 sentence = mySentence.nextLine();
                 if (Objects.equals(sentence, "list")) {
-                    printList(task, totalTask);
+                    printList(task);
                 } else if (sentence.contains("done")) {
-                    markDone(task, totalTask, sentence);
+                    markDone(task, sentence);
                 } else if (Objects.equals(sentence, "bye")) {
                     exitMessage();
                 } else {
-                    totalTask = createTask(task, totalTask, sentence);
+                    createTask(task, sentence);
                 }
             } catch (DukeException err) {
                 System.out.println("---------------------------------------------------------");
@@ -45,7 +44,7 @@ public class Duke {
         }
     }
 
-    private static int createTask(Task[] task, int totalTask, String sentence) throws DukeException, IndexOutOfBoundsException {
+    private static void createTask(ArrayList<Task> task, String sentence) throws DukeException, IndexOutOfBoundsException {
         if (sentence.contains("deadline")) {
             sentence = sentence.replace("deadline", "");
             int slashPos = sentence.indexOf("/");
@@ -56,13 +55,12 @@ public class Duke {
             String by = null;
             int byPos = sentence.indexOf("/by");
             by = sentence.substring(byPos + 3);
-            task[totalTask] = new Deadline(deadline, by);
+            task.add(new Deadline(deadline, by));
             System.out.println("-----------------------------------");
             System.out.println("Got it. I've added this task");
-            System.out.println(task[totalTask].toString());
-            System.out.println("Now you have " + (totalTask + 1) + " tasks in the list");
+            System.out.println(task.get(task.size() - 1).toString());
+            System.out.println("Now you have " + task.size() + " tasks in the list");
             System.out.println("-----------------------------------");
-            totalTask++;
         } else if (sentence.contains("event")) {
             sentence = sentence.replace("event", "");
             int slashPos = sentence.indexOf("/");
@@ -73,52 +71,49 @@ public class Duke {
             String at = null;
             int atPos = sentence.indexOf("/at");
             at = sentence.substring(atPos + 3);
-            task[totalTask] = new Event(event, at);
+            task.add(new Event(event, at));
             System.out.println("-----------------------------------");
             System.out.println("Got it. I've added this task");
-            System.out.println(task[totalTask].toString());
-            System.out.println("Now you have " + (totalTask + 1) + " tasks in the list");
+            System.out.println(task.get(task.size() - 1).toString());
+            System.out.println("Now you have " + task.size() + " tasks in the list");
             System.out.println("-----------------------------------");
-            totalTask++;
         } else if (sentence.contains("todo")) {
             String todo = sentence.replace("todo", "");
             if(todo.equals("")) {
                 throw new IndexOutOfBoundsException("OOPS!!! The description of a todo cannot be empty.");
             }
-            task[totalTask] = new Todo(todo);
+            task.add(new Todo(todo));
             System.out.println("-----------------------------------");
             System.out.println("Got it. I've added this task");
-            System.out.println(task[totalTask].toString());
-            System.out.println("Now you have " + (totalTask + 1) + " tasks in the list");
+            System.out.println(task.get(task.size() - 1).toString());
+            System.out.println("Now you have " + task.size() + " tasks in the list");
             System.out.println("-----------------------------------");
-            totalTask++;
         } else {
             throw new DukeException();
         }
-        return totalTask;
     }
 
-    private static void markDone(Task[] task, int totalTask, String word) throws NullPointerException {
+    private static void markDone(ArrayList<Task> task, String word) throws NullPointerException {
         String num = word.substring(word.length() - 1);
         int index = Integer.parseInt(num);
-        if(index > totalTask) {
+        if(index > task.size()) {
             throw new NullPointerException("Number given is more than the number of tasks in list");
         }
-        task[index - 1].setDone();
+        task.get(index - 1).setDone();
         System.out.println("-----------------------------------");
         System.out.println("Nice! I've marked this task as done:");
-        System.out.println(task[index - 1].toString());
+        System.out.println(task.get(index - 1).toString());
         System.out.println("-----------------------------------");
     }
 
-    private static void printList(Task[] task, int totalTask) {
+    private static void printList(ArrayList<Task> task) {
         System.out.println("-----------------------------------");
-        if(totalTask == 0) {
+        if(task.size() == 0) {
             System.out.println("No tasks in list");
         }
         else {
-            for (int i = 0; i < totalTask; i++) {
-                System.out.println(i + 1 + ". " + task[i].toString());
+            for (int i = 0; i < task.size(); i++) {
+                System.out.println(i + 1 + ". " + task.get(i).toString());
             }
         }
         System.out.println("-----------------------------------");
