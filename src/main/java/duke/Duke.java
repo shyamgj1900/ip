@@ -25,6 +25,8 @@ public class Duke {
                     markDone(task, sentence);
                 } else if (Objects.equals(sentence, "bye")) {
                     exitMessage();
+                } else if (sentence.contains("delete")) {
+                      deleteTask(task, sentence);
                 } else {
                     createTask(task, sentence);
                 }
@@ -91,6 +93,20 @@ public class Duke {
         } else {
             throw new DukeException();
         }
+    }
+
+    public static void deleteTask(ArrayList<Task> task, String word) throws NullPointerException {
+        String num = word.substring(word.length() - 1);
+        int index = Integer.parseInt(num);
+        if(index > task.size()) {
+            throw new NullPointerException("Number given is more than the number of tasks in list");
+        }
+        System.out.println("-----------------------------------");
+        System.out.println("Noted. I've removed this task:");
+        System.out.println(task.get(index - 1).toString());
+        task.remove(index - 1);
+        System.out.println("Now you have " + task.size() + " tasks in the list");
+        System.out.println("-----------------------------------");
     }
 
     private static void markDone(ArrayList<Task> task, String word) throws NullPointerException {
