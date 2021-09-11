@@ -1,4 +1,7 @@
 D < > assignment by: Monday 12PM
 E <X> meeting at: Tuesday 3PM
-T < > read book
-
+T <X> read book
+D <X> reading by: Friday 5PM
+T < > play game
+E <X> groceries at: Sunday 2PM
+T < > watch movie

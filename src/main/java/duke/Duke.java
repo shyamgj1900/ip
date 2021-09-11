@@ -5,7 +5,12 @@ import duke.task.Event;
 import duke.task.Task;
 import duke.task.Todo;
 
-import java.io.*;
+import java.io.FileWriter;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -17,7 +22,21 @@ public class Duke {
         Scanner mySentence = new Scanner(System.in);
         ArrayList<Task> task = new ArrayList<>();
         String file = "data/duke.txt";
+        try {
+            loadFile(file, task);
+        } catch (FileNotFoundException err) {
+            System.out.println("-----------------------------------");
+            System.out.println("File not found");
+        }
         welcomeMessage();
+        if(task.size() != 0) {
+            System.out.println("Tasks loaded from file!!!!");
+            System.out.println("There are " + task.size() + " tasks present");
+            System.out.println("-----------------------------------");
+        } else {
+            System.out.println("Tasks file empty");
+            System.out.println("-----------------------------------");
+        }
         String sentence = "";
         while (!Objects.equals(sentence, "bye")) {
             try {
@@ -53,13 +72,50 @@ public class Duke {
         }
     }
 
+    private static void loadFile(String filePath, ArrayList<Task> task) throws FileNotFoundException {
+        ArrayList<String> fileContents = new ArrayList<>();
+        File f = new File(filePath);
+        Scanner s = new Scanner(f);
+        while (s.hasNext()) {
+            fileContents.add(s.nextLine());
+        }
+        for(int i = 0; i < fileContents.size(); i++) {
+            if(fileContents.get(i).startsWith("D")) {
+                int greaterSymbolPos = fileContents.get(i).indexOf(">");
+                int byPos = fileContents.get(i).indexOf("by:");
+                String deadline = fileContents.get(i).substring(greaterSymbolPos + 1, byPos);
+                String by = fileContents.get(i).substring(byPos + 3);
+                task.add(new Deadline(deadline, by));
+                if(fileContents.get(i).contains("<X>")){
+                    task.get(i).setDone();
+                }
+            } else if(fileContents.get(i).startsWith("E")) {
+                int greaterSymbolPos = fileContents.get(i).indexOf(">");
+                int atPos = fileContents.get(i).indexOf("at:");
+                String event = fileContents.get(i).substring(greaterSymbolPos + 1, atPos);
+                String at = fileContents.get(i).substring(atPos + 3);
+                task.add(new Event(event, at));
+                if(fileContents.get(i).contains("<X>")){
+                    task.get(i).setDone();
+                }
+            } else if(fileContents.get(i).startsWith("T")) {
+                int greaterSymbolPos = fileContents.get(i).indexOf(">");
+                String todo = fileContents.get(i).substring(greaterSymbolPos + 1);
+                task.add(new Todo(todo));
+                if(fileContents.get(i).contains("<X>")){
+                    task.get(i).setDone();
+                }
+            }
+        }
+    }
+
     private static void writeToFile(String filePath, String textToAdd) throws IOException {
         FileWriter fw = new FileWriter(filePath, true);
         fw.write(textToAdd + System.lineSeparator());
         fw.close();
     }
 
-    private static void overwriteFile(String filePath, String oldString, String newString) throws IOException {
+    private static void editFile(String filePath, String oldString, String newString) throws IOException {
         File fileToBeModified = new File(filePath);
         String oldContent = "";
         BufferedReader reader = new BufferedReader(new FileReader(fileToBeModified));
@@ -134,7 +190,7 @@ public class Duke {
             throw new NullPointerException("Number given is more than the number of tasks in list");
         }
         String oldString = task.get(index - 1).fileText();
-        overwriteFile(filePath, oldString, "");
+        editFile(filePath, oldString, "");
         System.out.println("-----------------------------------");
         System.out.println("Noted. I've removed this task:");
         System.out.println(task.get(index - 1).toString());
@@ -151,7 +207,7 @@ public class Duke {
         }
         String oldString = task.get(index - 1).fileText();
         task.get(index - 1).setDone();
-        overwriteFile(filePath, oldString, task.get(index - 1).fileText());
+        editFile(filePath, oldString, task.get(index - 1).fileText());
         System.out.println("-----------------------------------");
         System.out.println("Nice! I've marked this task as done:");
         System.out.println(task.get(index - 1).toString());
