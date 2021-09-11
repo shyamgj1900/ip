@@ -9,6 +9,11 @@ public class Event extends Task {
     }
 
     @Override
+    public String fileText() {
+        return "E" + super.fileText() + "at:" + this.at;
+    }
+
+    @Override
     public String toString() {
         return "[E]" + super.toString() + " (at:" + this.at + ")";
     }
