@@ -9,6 +9,11 @@ public class Deadline extends Task {
     }
 
     @Override
+    public String fileText() {
+        return "D" + super.fileText() + "by:" + this.by;
+    }
+
+    @Override
     public String toString() {
         return "[D]" + super.toString() + " (by:" + this.by + ")";
     }

@@ -6,6 +6,11 @@ public class Todo extends Task {
     }
 
     @Override
+    public String fileText() {
+        return "T" + super.fileText();
+    }
+
+    @Override
     public String toString() {
         return "[T]" + super.toString();
     }

@@ -25,6 +25,10 @@ public class Task {
         isDone = true;
     }
 
+    public String fileText() {
+        return " <" + this.getStatusIcon() + ">" + this.getTask();
+    }
+
     @Override
     public String toString() {
         return "[" + this.getStatusIcon() + "]" + this.getTask();
