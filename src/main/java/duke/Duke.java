@@ -29,7 +29,7 @@ public class Duke {
             System.out.println("File not found");
         }
         welcomeMessage();
-        if(task.size() != 0) {
+        if (task.size() != 0) {
             System.out.println("Tasks loaded from file!!!!");
             System.out.println("There are " + task.size() + " tasks present");
             System.out.println("-----------------------------------");
@@ -79,30 +79,30 @@ public class Duke {
         while (s.hasNext()) {
             fileContents.add(s.nextLine());
         }
-        for(int i = 0; i < fileContents.size(); i++) {
-            if(fileContents.get(i).startsWith("D")) {
+        for (int i = 0; i < fileContents.size(); i++) {
+            if (fileContents.get(i).startsWith("D")) {
                 int greaterSymbolPos = fileContents.get(i).indexOf(">");
                 int byPos = fileContents.get(i).indexOf("by:");
                 String deadline = fileContents.get(i).substring(greaterSymbolPos + 1, byPos);
                 String by = fileContents.get(i).substring(byPos + 3);
                 task.add(new Deadline(deadline, by));
-                if(fileContents.get(i).contains("<X>")){
+                if (fileContents.get(i).contains("<X>")){
                     task.get(i).setDone();
                 }
-            } else if(fileContents.get(i).startsWith("E")) {
+            } else if (fileContents.get(i).startsWith("E")) {
                 int greaterSymbolPos = fileContents.get(i).indexOf(">");
                 int atPos = fileContents.get(i).indexOf("at:");
                 String event = fileContents.get(i).substring(greaterSymbolPos + 1, atPos);
                 String at = fileContents.get(i).substring(atPos + 3);
                 task.add(new Event(event, at));
-                if(fileContents.get(i).contains("<X>")){
+                if (fileContents.get(i).contains("<X>")){
                     task.get(i).setDone();
                 }
-            } else if(fileContents.get(i).startsWith("T")) {
+            } else if (fileContents.get(i).startsWith("T")) {
                 int greaterSymbolPos = fileContents.get(i).indexOf(">");
                 String todo = fileContents.get(i).substring(greaterSymbolPos + 1);
                 task.add(new Todo(todo));
-                if(fileContents.get(i).contains("<X>")){
+                if (fileContents.get(i).contains("<X>")){
                     task.get(i).setDone();
                 }
             }
@@ -120,7 +120,7 @@ public class Duke {
         String oldContent = "";
         BufferedReader reader = new BufferedReader(new FileReader(fileToBeModified));
         String line = reader.readLine();
-        while(line != null) {
+        while (line != null) {
             oldContent = oldContent + line + System.lineSeparator();
             line = reader.readLine();
         }
@@ -135,7 +135,7 @@ public class Duke {
         if (sentence.contains("deadline")) {
             sentence = sentence.replace("deadline", "");
             int slashPos = sentence.indexOf("/");
-            if(slashPos < 0) {
+            if (slashPos < 0) {
                 throw new IndexOutOfBoundsException("OOPS!!! The description of a deadline cannot be empty. Must also specify /by");
             }
             String deadline = sentence.substring(0, slashPos);
@@ -152,7 +152,7 @@ public class Duke {
         } else if (sentence.contains("event")) {
             sentence = sentence.replace("event", "");
             int slashPos = sentence.indexOf("/");
-            if(slashPos < 0) {
+            if (slashPos < 0) {
                 throw new IndexOutOfBoundsException("OOPS!!! The description of an event cannot be empty. Must also specify /at");
             }
             String event = sentence.substring(0, slashPos);
@@ -168,7 +168,7 @@ public class Duke {
             System.out.println("-----------------------------------");
         } else if (sentence.contains("todo")) {
             String todo = sentence.replace("todo", "");
-            if(todo.equals("")) {
+            if (todo.equals("")) {
                 throw new IndexOutOfBoundsException("OOPS!!! The description of a todo cannot be empty.");
             }
             task.add(new Todo(todo));
@@ -186,7 +186,7 @@ public class Duke {
     public static void deleteTask(ArrayList<Task> task, String word, String filePath) throws NullPointerException, IOException {
         String num = word.substring(word.length() - 1);
         int index = Integer.parseInt(num);
-        if(index > task.size()) {
+        if (index > task.size()) {
             throw new NullPointerException("Number given is more than the number of tasks in list");
         }
         String oldString = task.get(index - 1).fileText();
@@ -202,7 +202,7 @@ public class Duke {
     private static void markDone(ArrayList<Task> task, String word, String filePath) throws NullPointerException, IOException {
         String num = word.substring(word.length() - 1);
         int index = Integer.parseInt(num);
-        if(index > task.size()) {
+        if (index > task.size()) {
             throw new NullPointerException("Number given is more than the number of tasks in list");
         }
         String oldString = task.get(index - 1).fileText();
@@ -216,7 +216,7 @@ public class Duke {
 
     private static void printList(ArrayList<Task> task) {
         System.out.println("-----------------------------------");
-        if(task.size() == 0) {
+        if (task.size() == 0) {
             System.out.println("No tasks in list");
         }
         else {
