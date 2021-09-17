@@ -18,7 +18,7 @@ public class Duke {
     public Duke(String filePath) {
         ArrayList<Task> tasks = new ArrayList<>();
         ui = new Ui();
-        storage = new Storage(filePath, tasks);
+        storage = new Storage(filePath);
         task = new TaskList(filePath, tasks);
         parse = new Parser(filePath, tasks);
         try {

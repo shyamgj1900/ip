@@ -69,4 +69,12 @@ public class Ui {
     public void noTaskMessage() {
         System.out.println("No tasks in list");
     }
+
+    public void taskFoundMessage() {
+        System.out.println("Here are the matching tasks in your list:");
+    }
+
+    public void taskNotFoundMessage() {
+        System.out.println("No tasks match the given query");
+    }
 }

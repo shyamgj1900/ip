@@ -20,6 +20,7 @@ public class Parser {
     private static final String DEADLINE_COMMAND = "deadline";
     private static final String EVENT_COMMAND = "event";
     private static final String TODO_COMMAND = "todo";
+    private static final String FIND_COMMAND = "find";
 
     public Parser(String filePath, ArrayList<Task> tasks) {
         ui = new Ui();
@@ -40,6 +41,8 @@ public class Parser {
                 } else if (Objects.equals(ui.getCommand(), EXIT_COMMAND)) {
                     ui.exitMessage();
                     flag = false;
+                } else if(ui.getCommand().contains(FIND_COMMAND)) {
+                      task.searchTask(ui.getCommand());
                 } else {
                     task.createTask(ui.getCommand());
                 }
@@ -94,5 +97,9 @@ public class Parser {
     public int getIndex(String command) {
         String[] splitStr = command.split(" ");
         return Integer.parseInt(splitStr[splitStr.length - 1]);
+    }
+
+    public String getFindTask(String command) {
+        return command.replace("find", "");
     }
 }
