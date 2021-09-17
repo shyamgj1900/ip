@@ -11,11 +11,9 @@ import java.util.Scanner;
 
 public class Storage {
     private String filePath = "";
-    private ArrayList<Task> tasks;
 
-    public Storage(String filePath, ArrayList<Task> tasks) {
+    public Storage(String filePath) {
         this.filePath = filePath;
-        this.tasks = tasks;
     }
 
     public void loadFile(ArrayList<Task> task) throws FileNotFoundException {
@@ -64,16 +62,35 @@ public class Storage {
     public void editFile(String oldString, String newString) throws IOException {
         File fileToBeModified = new File(filePath);
         String oldContent = "";
-        BufferedReader reader = new BufferedReader(new FileReader(fileToBeModified));
-        String line = reader.readLine();
+        BufferedReader br = new BufferedReader(new FileReader(fileToBeModified));
+        String line = br.readLine();
         while (line != null) {
             oldContent = oldContent + line + System.lineSeparator();
-            line = reader.readLine();
+            line = br.readLine();
         }
         String newContent = oldContent.replaceAll(oldString, newString);
         FileWriter fw = new FileWriter(fileToBeModified);
         fw.write(newContent);
-        reader.close();
+        br.close();
         fw.close();
+    }
+
+    public void deleteTextFromFile(String task) throws IOException {
+        File fileToBeModified = new File(filePath);
+        File tempFile = new File(fileToBeModified.getAbsolutePath() + ".tmp");
+        BufferedReader br = new BufferedReader(new FileReader(fileToBeModified));
+        PrintWriter pw = new PrintWriter(new FileWriter(tempFile));
+        String line = br.readLine();
+        while (line != null) {
+            if (!line.equals(task)) {
+                pw.println(line);
+                pw.flush();
+            }
+            line = br.readLine();
+        }
+        pw.close();
+        br.close();
+        fileToBeModified.delete();
+        tempFile.renameTo(fileToBeModified);
     }
 }

@@ -13,8 +13,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class TaskList {
-    private String filePath = "";
     private ArrayList<Task> tasks;
+    private final String filePath;
+    private final Ui ui;
+    private final Storage storage;
 
     private static final String DEADLINE_COMMAND = "deadline";
     private static final String EVENT_COMMAND = "event";
@@ -23,11 +25,11 @@ public class TaskList {
     public TaskList(String filePath, ArrayList<Task> tasks) {
         this.filePath = filePath;
         this.tasks = tasks;
+        ui = new Ui();
+        storage = new Storage(filePath);
     }
 
     public void createTask(String command) throws DukeException, IndexOutOfBoundsException, IOException {
-        Ui ui = new Ui();
-        Storage storage = new Storage(filePath, tasks);
         Parser parse = new Parser(filePath, tasks);
         if (command.contains(DEADLINE_COMMAND)) {
             int slashPos = parse.getSlashPos(command);
@@ -75,15 +77,13 @@ public class TaskList {
     }
 
     public void deleteTask(String command) throws NullPointerException, IOException {
-        Ui ui = new Ui();
-        Storage storage = new Storage(filePath, tasks);
         Parser parse = new Parser(filePath, tasks);
         int index = parse.getIndex(command);
         if (index > tasks.size()) {
             throw new NullPointerException("Number given is more than the number of tasks in list");
         }
-        String oldString = tasks.get(index - 1).fileText();
-        storage.editFile(oldString, "");
+        String taskToBeDeleted = tasks.get(index - 1).fileText();
+        storage.deleteTextFromFile(taskToBeDeleted);
         ui.showShortLine();
         ui.taskRemovedMessage();
         System.out.println(tasks.get(index - 1).toString());
@@ -93,8 +93,6 @@ public class TaskList {
     }
 
     public void markDone(String command) throws NullPointerException, IOException {
-        Ui ui = new Ui();
-        Storage storage = new Storage(filePath, tasks);
         Parser parse = new Parser(filePath, tasks);
         int index = parse.getIndex(command);
         if (index > tasks.size()) {
@@ -106,6 +104,27 @@ public class TaskList {
         ui.showShortLine();
         ui.taskDoneMessage();
         System.out.println(tasks.get(index - 1).toString());
+        ui.showShortLine();
+    }
+
+    public void searchTask(String command) {
+        Parser parse = new Parser(filePath, tasks);
+        String task = parse.getFindTask(command);
+        int j = 0;
+        for (int i = 0; i < tasks.size(); i++) {
+            if(tasks.get(i).getTask().contains(task)) {
+                if(j == 0) {
+                    ui.showShortLine();
+                    ui.taskFoundMessage();
+                }
+                System.out.println(j + 1 + ". " + tasks.get(i).toString());
+                j++;
+            }
+        }
+        if(j == 0) {
+            ui.showShortLine();
+            ui.taskNotFoundMessage();
+        }
         ui.showShortLine();
     }
 
@@ -124,7 +143,7 @@ public class TaskList {
     }
 
     public ArrayList<Task> getTask() {
-        return tasks;
+       return tasks;
     }
 
     public int getTaskSize() {

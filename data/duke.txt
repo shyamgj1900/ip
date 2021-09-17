@@ -1,7 +1,7 @@
-D < > assignment by: Monday 12PM
+D < > submit CS iP by: Tuesday 12PM
 E <X> meeting at: Tuesday 3PM
 T <X> read book
-D <X> reading by: Friday 5PM
-T < > play game
-E <X> groceries at: Sunday 2PM
+D <X> submit assignment by: Friday 5PM
+T < > play tennis
+E <X> family lunch at: Sunday 1PM
 T < > watch movie
