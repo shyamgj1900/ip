@@ -76,7 +76,7 @@ public class TaskList {
         }
     }
 
-    public void deleteTask(String command) throws NullPointerException, IOException {
+    public void deleteTask(String command) throws NullPointerException, IOException, NumberFormatException {
         Parser parse = new Parser(filePath, tasks);
         int index = parse.getIndex(command);
         if (index > tasks.size()) {
@@ -92,7 +92,7 @@ public class TaskList {
         ui.showShortLine();
     }
 
-    public void markDone(String command) throws NullPointerException, IOException {
+    public void markDone(String command) throws NullPointerException, IOException, NumberFormatException {
         Parser parse = new Parser(filePath, tasks);
         int index = parse.getIndex(command);
         if (index > tasks.size()) {
@@ -110,18 +110,18 @@ public class TaskList {
     public void searchTask(String command) {
         Parser parse = new Parser(filePath, tasks);
         String task = parse.getFindTask(command);
-        int j = 0;
+        int count = 0;
         for (int i = 0; i < tasks.size(); i++) {
             if(tasks.get(i).getTask().contains(task)) {
-                if(j == 0) {
+                if(count == 0) {
                     ui.showShortLine();
                     ui.taskFoundMessage();
                 }
-                System.out.println(j + 1 + ". " + tasks.get(i).toString());
-                j++;
+                System.out.println(count + 1 + ". " + tasks.get(i).toString());
+                count++;
             }
         }
-        if(j == 0) {
+        if(count == 0) {
             ui.showShortLine();
             ui.taskNotFoundMessage();
         }

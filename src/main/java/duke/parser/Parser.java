@@ -62,6 +62,10 @@ public class Parser {
                 ui.showMediumLine();
                 System.out.println("Something went wrong" + err.getMessage());
                 ui.showMediumLine();
+            } catch (NumberFormatException err) {
+                ui.showShortLine();
+                ui.invalidIntegerMessage();
+                ui.showShortLine();
             }
         }
     }

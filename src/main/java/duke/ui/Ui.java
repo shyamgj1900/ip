@@ -54,6 +54,10 @@ public class Ui {
         System.out.println("OOPS!!! I'm sorry, but I don't know what that means :-(");
     }
 
+    public void invalidIntegerMessage() {
+        System.out.println("Please specify an integer");
+    }
+
     public void taskAddedMessage() {
         System.out.println("Got it. I've added this task");
     }
