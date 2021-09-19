@@ -18,9 +18,9 @@ public class TaskList {
     private final Ui ui;
     private final Storage storage;
 
-    private static final String DEADLINE_COMMAND = "deadline";
-    private static final String EVENT_COMMAND = "event";
-    private static final String TODO_COMMAND = "todo";
+    private static final String COMMAND_DEADLINE = "deadline";
+    private static final String COMMAND_EVENT = "event";
+    private static final String COMMAND_TODO = "todo";
 
     public TaskList(String filePath, ArrayList<Task> tasks) {
         this.filePath = filePath;
@@ -29,48 +29,13 @@ public class TaskList {
         storage = new Storage(filePath);
     }
 
-    public void createTask(String command) throws DukeException, IndexOutOfBoundsException, IOException {
-        Parser parse = new Parser(filePath, tasks);
-        if (command.contains(DEADLINE_COMMAND)) {
-            int slashPos = parse.getSlashPos(command);
-            if (slashPos < 0) {
-                throw new IndexOutOfBoundsException("OOPS!!! The description of a deadline cannot be empty. Must also specify /by");
-            }
-            String deadline = parse.getDeadline(command, slashPos);
-            String by = parse.getTaskDuration(command);
-            tasks.add(new Deadline(deadline, by));
-            storage.writeToFile(tasks.get(tasks.size() - 1).fileText());
-            ui.showShortLine();
-            ui.taskAddedMessage();
-            System.out.println(tasks.get(tasks.size() - 1).toString());
-            System.out.println("Now you have " + tasks.size() + " tasks in the list");
-            ui.showShortLine();
-        } else if (command.contains(EVENT_COMMAND)) {
-            int slashPos = parse.getSlashPos(command);
-            if (slashPos < 0) {
-                throw new IndexOutOfBoundsException("OOPS!!! The description of an event cannot be empty. Must also specify /at");
-            }
-            String event = parse.getEvent(command, slashPos);
-            String at = parse.getTaskDuration(command);
-            tasks.add(new Event(event, at));
-            storage.writeToFile(tasks.get(tasks.size() - 1).fileText());
-            ui.showShortLine();
-            ui.taskAddedMessage();
-            System.out.println(tasks.get(tasks.size() - 1).toString());
-            System.out.println("Now you have " + tasks.size() + " tasks in the list");
-            ui.showShortLine();
-        } else if (command.contains(TODO_COMMAND)) {
-            String todo = parse.getTodo(command);
-            if (todo.equals("")) {
-                throw new IndexOutOfBoundsException("OOPS!!! The description of a todo cannot be empty.");
-            }
-            tasks.add(new Todo(todo));
-            storage.writeToFile(tasks.get(tasks.size() - 1).fileText());
-            ui.showShortLine();
-            ui.taskAddedMessage();
-            System.out.println(tasks.get(tasks.size() - 1).toString());
-            System.out.println("Now you have " + tasks.size() + " tasks in the list");
-            ui.showShortLine();
+    public void createTask(String command) throws DukeException, IOException {
+        if (command.contains(COMMAND_DEADLINE)) {
+            processDeadline(command);
+        } else if (command.contains(COMMAND_EVENT)) {
+            processEvent(command);
+        } else if (command.contains(COMMAND_TODO)) {
+            processTodo(command);
         } else {
             throw new DukeException();
         }
@@ -133,8 +98,7 @@ public class TaskList {
         ui.showShortLine();
         if (tasks.size() == 0) {
             ui.noTaskMessage();
-        }
-        else {
+        } else {
             for (int i = 0; i < tasks.size(); i++) {
                 System.out.println(i + 1 + ". " + tasks.get(i).toString());
             }
@@ -148,5 +112,50 @@ public class TaskList {
 
     public int getTaskSize() {
         return tasks.size();
+    }
+
+    private void processDeadline(String command) throws IndexOutOfBoundsException, IOException {
+        Parser parse = new Parser(filePath, tasks);
+        int slashPos = parse.getSlashPos(command);
+        if (slashPos < 0) {
+            throw new IndexOutOfBoundsException("OOPS!!! The description of a deadline cannot be empty. Must also specify /by");
+        }
+        String deadline = parse.getDeadline(command, slashPos);
+        String by = parse.getTaskDuration(command);
+        tasks.add(new Deadline(deadline, by));
+        storage.writeToFile(tasks.get(tasks.size() - 1).fileText());
+        taskAdded();
+    }
+
+    private void processEvent(String command) throws IndexOutOfBoundsException, IOException {
+        Parser parse = new Parser(filePath, tasks);
+        int slashPos = parse.getSlashPos(command);
+        if (slashPos < 0) {
+            throw new IndexOutOfBoundsException("OOPS!!! The description of an event cannot be empty. Must also specify /at");
+        }
+        String event = parse.getEvent(command, slashPos);
+        String at = parse.getTaskDuration(command);
+        tasks.add(new Event(event, at));
+        storage.writeToFile(tasks.get(tasks.size() - 1).fileText());
+        taskAdded();
+    }
+
+    private void processTodo(String command) throws IndexOutOfBoundsException, IOException {
+        Parser parse = new Parser(filePath, tasks);
+        String todo = parse.getTodo(command);
+        if (todo.equals("")) {
+            throw new IndexOutOfBoundsException("OOPS!!! The description of a todo cannot be empty.");
+        }
+        tasks.add(new Todo(todo));
+        storage.writeToFile(tasks.get(tasks.size() - 1).fileText());
+        taskAdded();
+    }
+
+    private void taskAdded() {
+        ui.showShortLine();
+        ui.taskAddedMessage();
+        System.out.println(tasks.get(tasks.size() - 1).toString());
+        System.out.println("Now you have " + tasks.size() + " tasks in the list");
+        ui.showShortLine();
     }
 }

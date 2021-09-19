@@ -55,7 +55,7 @@ public class Ui {
     }
 
     public void invalidIntegerMessage() {
-        System.out.println("Please specify an integer");
+        System.out.println("Please specify an index number");
     }
 
     public void taskAddedMessage() {

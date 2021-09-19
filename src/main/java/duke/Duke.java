@@ -38,7 +38,7 @@ public class Duke {
             ui.fileEmptyMessage();
         }
         ui.showShortLine();
-        parse.processUserInput();
+        parse.parseCommand();
     }
 
     public static void main(String[] args) {
