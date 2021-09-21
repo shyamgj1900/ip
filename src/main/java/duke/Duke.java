@@ -9,29 +9,32 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class Duke {
-    private final Ui ui;
-    private final Storage storage;
-    private final TaskList task;
+    private static Ui ui;
+    private static Storage storage;
+    private static TaskList task;
 
     public Duke(String filePath) {
         ArrayList<Task> tasks = new ArrayList<>();
         ui = new Ui(tasks, filePath);
         storage = new Storage(filePath);
         task = new TaskList(tasks, filePath);
-        try {
-            storage.loadFile(task.getTask());
-        } catch (FileNotFoundException err) {
-            ui.showShortLine();
-            ui.fileNotFoundMessage();
-        }
     }
 
     public void run() {
         ui.welcomeMessage();
+        try {
+            storage.loadFile(task.getTask());
+        } catch (FileNotFoundException err) {
+            ui.showLongLine();
+            ui.fileNotFoundMessage();
+            ui.showLongLine();
+        }
         if (task.getTaskSize() != 0) {
+            ui.showShortLine();
             ui.taskLoadMessage();
             System.out.println("There are " + task.getTaskSize() + " tasks present");
         } else {
+            ui.showShortLine();
             ui.fileEmptyMessage();
         }
         ui.showShortLine();

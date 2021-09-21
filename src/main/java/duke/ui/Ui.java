@@ -94,7 +94,7 @@ public class Ui {
     }
 
     public void fileNotFoundMessage() {
-        System.out.println("File not found");
+        System.out.println("File not found. Don't worry we have created a new text file for you.");
     }
 
     public void taskLoadMessage() {
@@ -102,7 +102,7 @@ public class Ui {
     }
 
     public void fileEmptyMessage() {
-        System.out.println("Tasks file empty");
+        System.out.println("Tasks file is currently empty.");
     }
 
     public void invalidCommandMessage() {
