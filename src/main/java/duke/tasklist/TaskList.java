@@ -13,22 +13,32 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class TaskList {
-    private ArrayList<Task> tasks;
-    private final String filePath;
-    private final Ui ui;
+    private final ArrayList<Task> tasks;
+    private final Parser parse;
     private final Storage storage;
+    private final Ui ui;
 
     private static final String COMMAND_DEADLINE = "deadline";
     private static final String COMMAND_EVENT = "event";
     private static final String COMMAND_TODO = "todo";
 
-    public TaskList(String filePath, ArrayList<Task> tasks) {
-        this.filePath = filePath;
+
+    public TaskList(ArrayList<Task> tasks, String filePath) {
         this.tasks = tasks;
-        ui = new Ui();
+        parse = new Parser();
         storage = new Storage(filePath);
+        ui = new Ui(tasks, filePath);
     }
 
+    /**
+     * Creates a new task by adding the task to an Array list of class Task objects.
+     * Task to be added is checked whether it is of type deadline, event or to-do.
+     * Given text file is also updated accordingly.
+     *
+     * @param command task to be added to the array list of class Task objects.
+     * @throws DukeException exception is thrown whenever an invalid input is given by the user.
+     * @throws IOException exception is thrown whenever an input or output operation fails.
+     */
     public void createTask(String command) throws DukeException, IOException {
         if (command.contains(COMMAND_DEADLINE)) {
             processDeadline(command);
@@ -41,8 +51,17 @@ public class TaskList {
         }
     }
 
+    /**
+     * Deletes a task from the array list of class Task object.
+     * Task to be deleted is passed from the user and is removed from the array list.
+     * Given text file is also updated accordingly.
+     *
+     * @param command task to be deleted from the array list
+     * @throws NullPointerException exception is thrown when null is used in a case where object is required.
+     * @throws IOException exception is thrown whenever an input or output operation fails.
+     * @throws NumberFormatException exception is thrown whenever given number is not of correct format.
+     */
     public void deleteTask(String command) throws NullPointerException, IOException, NumberFormatException {
-        Parser parse = new Parser(filePath, tasks);
         int index = parse.getIndex(command);
         if (index > tasks.size()) {
             throw new NullPointerException("Number given is more than the number of tasks in list");
@@ -57,8 +76,17 @@ public class TaskList {
         ui.showShortLine();
     }
 
+    /**
+     * Marks a given task as done in the array list of class Task objects.
+     * Task to be marked done is passed from user and is marked as done in the array list.
+     * Given text file is also updated accordingly.
+     *
+     * @param command task to be deleted from the array list
+     * @throws NullPointerException exception is thrown when null is used in a case where object is required.
+     * @throws IOException exception is thrown whenever an input or output operation fails.
+     * @throws NumberFormatException exception is thrown whenever given number is not of correct format.
+     */
     public void markDone(String command) throws NullPointerException, IOException, NumberFormatException {
-        Parser parse = new Parser(filePath, tasks);
         int index = parse.getIndex(command);
         if (index > tasks.size()) {
             throw new NullPointerException("Number given is more than the number of tasks in list");
@@ -72,8 +100,15 @@ public class TaskList {
         ui.showShortLine();
     }
 
+    /**
+     * Tasks are displayed according to the users search query.
+     * User can give a task name they want to view. The respective task is
+     * then displayed on the screen if the given tasks matches any of the tasks
+     * in the list, else no tasks are displayed.
+     *
+     * @param command task to be found and displayed.
+     */
     public void searchTask(String command) {
-        Parser parse = new Parser(filePath, tasks);
         String task = parse.getFindTask(command);
         int count = 0;
         for (int i = 0; i < tasks.size(); i++) {
@@ -93,8 +128,11 @@ public class TaskList {
         ui.showShortLine();
     }
 
+    /**
+     * Prints the array list of class Task objects. No tasks are printed if the
+     * array list is empty.
+     */
     public void printList() {
-        Ui ui = new Ui();
         ui.showShortLine();
         if (tasks.size() == 0) {
             ui.noTaskMessage();
@@ -106,16 +144,25 @@ public class TaskList {
         ui.showShortLine();
     }
 
+    /**
+     * Getter method which returns the array list.
+     *
+     * @return the array list of class Task objects.
+     */
     public ArrayList<Task> getTask() {
        return tasks;
     }
 
+    /**
+     * Getter method which the size of the array list.
+     *
+     * @return the array list of class Task objects size.
+     */
     public int getTaskSize() {
         return tasks.size();
     }
 
     private void processDeadline(String command) throws IndexOutOfBoundsException, IOException {
-        Parser parse = new Parser(filePath, tasks);
         int slashPos = parse.getSlashPos(command);
         if (slashPos < 0) {
             throw new IndexOutOfBoundsException("OOPS!!! The description of a deadline cannot be empty. Must also specify /by");
@@ -128,7 +175,6 @@ public class TaskList {
     }
 
     private void processEvent(String command) throws IndexOutOfBoundsException, IOException {
-        Parser parse = new Parser(filePath, tasks);
         int slashPos = parse.getSlashPos(command);
         if (slashPos < 0) {
             throw new IndexOutOfBoundsException("OOPS!!! The description of an event cannot be empty. Must also specify /at");
@@ -141,7 +187,6 @@ public class TaskList {
     }
 
     private void processTodo(String command) throws IndexOutOfBoundsException, IOException {
-        Parser parse = new Parser(filePath, tasks);
         String todo = parse.getTodo(command);
         if (todo.equals("")) {
             throw new IndexOutOfBoundsException("OOPS!!! The description of a todo cannot be empty.");

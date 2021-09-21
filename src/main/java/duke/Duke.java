@@ -1,6 +1,5 @@
 package duke;
 
-import duke.parser.Parser;
 import duke.storage.Storage;
 import duke.task.Task;
 import duke.tasklist.TaskList;
@@ -13,14 +12,12 @@ public class Duke {
     private final Ui ui;
     private final Storage storage;
     private final TaskList task;
-    private final Parser parse;
 
     public Duke(String filePath) {
         ArrayList<Task> tasks = new ArrayList<>();
-        ui = new Ui();
+        ui = new Ui(tasks, filePath);
         storage = new Storage(filePath);
-        task = new TaskList(filePath, tasks);
-        parse = new Parser(filePath, tasks);
+        task = new TaskList(tasks, filePath);
         try {
             storage.loadFile(task.getTask());
         } catch (FileNotFoundException err) {
@@ -38,7 +35,7 @@ public class Duke {
             ui.fileEmptyMessage();
         }
         ui.showShortLine();
-        parse.parseCommand();
+        ui.getUserInput();
     }
 
     public static void main(String[] args) {

@@ -1,15 +1,70 @@
 package duke.ui;
 
+import duke.DukeException;
+import duke.task.Task;
+import duke.tasklist.TaskList;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Ui {
     private String command = "";
+    private final ArrayList<Task> tasks;
+    private String filePath = "";
 
-    public void readCommand() {
-        Scanner myCommand = new Scanner(System.in);
-        command = myCommand.nextLine();
+    private static final String COMMAND_EXIT = "bye";
+    private static final String COMMAND_DISPLAY_TASKS = "list";
+    private static final String COMMAND_MARK_DONE = "done";
+    private static final String COMMAND_DELETE_TASK = "delete";
+    private static final String COMMAND_FIND = "find";
+
+    public Ui(ArrayList<Task> tasks, String filePath) {
+        this.tasks = tasks;
+        this.filePath = filePath;
     }
 
+    /**
+     * Input from the user is read till user inputs command "bye".
+     * The input command is read from the user using the readCommand() method from the Ui
+     * class and is passed to the "processUserInput()" method to resolve the user input further.
+     */
+    public void getUserInput() {
+        boolean flag = true;
+        while (flag) {
+            try {
+                readCommand(); //read input from user
+                flag = processUserInput(true);
+            } catch (DukeException err) {
+                showMediumLine();
+                invalidCommandMessage();
+                showMediumLine();
+            } catch (IndexOutOfBoundsException err) {
+                showLongLine();
+                System.out.println(err.getMessage());
+                showLongLine();
+            } catch (NullPointerException err) {
+                showMediumLine();
+                System.out.println(err.getMessage());
+                showMediumLine();
+            } catch (IOException err) {
+                showMediumLine();
+                System.out.println("Something went wrong" + err.getMessage());
+                showMediumLine();
+            } catch (NumberFormatException err) {
+                showShortLine();
+                invalidIntegerMessage();
+                showShortLine();
+            }
+        }
+    }
+
+    /**
+     * Getter method to return command entered by the user.
+     *
+     * @return the command entered by the user.
+     */
     public String getCommand() {
         return this.command;
     }
@@ -80,5 +135,37 @@ public class Ui {
 
     public void taskNotFoundMessage() {
         System.out.println("No tasks match the given query");
+    }
+
+    private void readCommand() {
+        Scanner myCommand = new Scanner(System.in);
+        command = myCommand.nextLine();
+    }
+
+    /**
+     * Checks the user input for a particular command to execute a particular action.
+     *
+     * @param flag checks whether further instruction need to be executed
+     * @return true if further actions are to be executed, false otherwise
+     * @throws IOException exception is thrown whenever an input or output operation fails.
+     * @throws DukeException exception is thrown whenever user inputs an invalid command.
+     */
+    private boolean processUserInput(boolean flag) throws IOException, DukeException {
+        TaskList task = new TaskList(tasks, filePath);
+        if (Objects.equals(getCommand(), COMMAND_DISPLAY_TASKS)) {
+            task.printList();
+        } else if (getCommand().contains(COMMAND_MARK_DONE)) {
+            task.markDone(getCommand());
+        } else if (getCommand().contains(COMMAND_DELETE_TASK)) {
+            task.deleteTask(getCommand());
+        } else if(getCommand().contains(COMMAND_FIND)) {
+            task.searchTask(getCommand());
+        } else if (Objects.equals(getCommand(), COMMAND_EXIT)) {
+            exitMessage();
+            flag = false;
+        } else {
+            task.createTask(getCommand());
+        }
+        return flag;
     }
 }
