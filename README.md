@@ -18,5 +18,6 @@ Prerequisites: JDK 11, update Intellij to the most recent version.
    -----------------------------------
    Hello! I'm Duke
    What can I do for you?
+   Enter "help" to see the list of commands
    -----------------------------------
    ```
