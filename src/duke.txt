@@ -1,0 +1,3 @@
+T <X> play tennis
+D < > do assignment by: Monday 3PM
+E < > attend meeting at: Wednesday 5PM

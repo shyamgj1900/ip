@@ -19,6 +19,7 @@ public class Ui {
     private static final String COMMAND_MARK_DONE = "done";
     private static final String COMMAND_DELETE_TASK = "delete";
     private static final String COMMAND_FIND = "find";
+    private static final String COMMAND_HELP = "help";
 
     public Ui(ArrayList<Task> tasks, String filePath) {
         this.tasks = tasks;
@@ -72,6 +73,7 @@ public class Ui {
     public void welcomeMessage() {
         System.out.println("-----------------------------------");
         System.out.println("Hello! I'm Duke\n" + "What can I do for you?");
+        System.out.println("Enter \"help\" to see the list of commands");
         System.out.println("-----------------------------------");
     }
 
@@ -137,6 +139,19 @@ public class Ui {
         System.out.println("No tasks match the given query");
     }
 
+    public void helpMessage() {
+        showMediumLine();
+        System.out.println("1) Add a deadline task." + System.lineSeparator() + "Example: deadline TASK_DESCRIPTION /by DEADLINE_TIME");
+        System.out.println("2) Add an event task." + System.lineSeparator() + "Example: event TASK_DESCRIPTION /at EVENT_TIME");
+        System.out.println("3) Add a todo task." + System.lineSeparator() + "Example: todo TASK_DESCRIPTION");
+        System.out.println("4) List all tasks." + System.lineSeparator() + "Example: list");
+        System.out.println("5) Mark task as done." + System.lineSeparator() + "Example: done TASK_INDEX_NUMBER");
+        System.out.println("6) Find task in list." + System.lineSeparator() + "Example: find TASK_NAME");
+        System.out.println("7) Delete a task." + System.lineSeparator() + "Example: delete TASK_INDEX_NUMBER");
+        System.out.println("8) Exit application." + System.lineSeparator() + "Example: bye");
+        showMediumLine();
+    }
+
     private void readCommand() {
         Scanner myCommand = new Scanner(System.in);
         command = myCommand.nextLine();
@@ -158,8 +173,10 @@ public class Ui {
             task.markDone(getCommand());
         } else if (getCommand().contains(COMMAND_DELETE_TASK)) {
             task.deleteTask(getCommand());
-        } else if(getCommand().contains(COMMAND_FIND)) {
+        } else if (getCommand().contains(COMMAND_FIND)) {
             task.searchTask(getCommand());
+        } else if (Objects.equals(getCommand(), COMMAND_HELP)) {
+            helpMessage();
         } else if (Objects.equals(getCommand(), COMMAND_EXIT)) {
             exitMessage();
             flag = false;
