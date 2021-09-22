@@ -5,12 +5,12 @@ Duke is a CLI(Command Line Interface) based application which allows users to ma
 ## How to get started
 
 1. Make sure Java 11 is installed on your device
-2. Download the Jar file from [here](https://github.com/shyamgj1900/ip/releases/tag/A-Jar)
-3. Copy the Jar file to a new folder, and run ```java -jar CS2113T-ip.jar```
+2. Download the Jar file from [here](https://github.com/shyamgj1900/ip/releases/tag/A-Release)
+3. Copy the Jar file to a new folder, and run ```java -jar ip.jar```
 
 Demo:
 ```markdown
-java -jar CS2113T-ip.jar
+Joe@MacBook-Pro Documents/jar % java -jar ip.jar
 
 -----------------------------------
 Hello! I'm Duke
@@ -36,6 +36,7 @@ List all tasks | ```list```
 Mark task as done | ```done TASK_INDEX_NUMBER```
 Find task | ```find TASK_NAME```
 Delete a task | ```delete TASK_INDEX_NUMBER```
+Help command | ```help```
 Exit application | ```bye```
 
 ## Guide on command usage
@@ -178,6 +179,36 @@ Noted. I've removed this task:
 [E][ ] attend Kanye West concert  (at: Sunday 6PM)
 Now you have 2 tasks in the list
 -----------------------------------
+```
+
+### Help command
+
+All the commands are listed for reference along with examples on how to use them.
+
+command: ```help```
+
+Demo:
+
+```
+help
+---------------------------------------------------------
+1) Add a deadline task.
+Example: deadline TASK_DESCRIPTION /by DEADLINE_TIME
+2) Add an event task.
+Example: event TASK_DESCRIPTION /at EVENT_TIME
+3) Add a todo task.
+Example: todo TASK_DESCRIPTION
+4) List all tasks.
+Example: list
+5) Mark task as done.
+Example: done TASK_INDEX_NUMBER
+6) Find task in list.
+Example: find TASK_NAME
+7) Delete a task.
+Example: delete TASK_INDEX_NUMBER
+8) Exit application.
+Example: bye
+---------------------------------------------------------
 ```
 
 ### Exit application
